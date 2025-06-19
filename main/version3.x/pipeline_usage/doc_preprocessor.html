@@ -463,7 +463,7 @@ You're not viewing the latest version.
     
     
       <li class="md-tabs__item">
-        <a href="../module_usage/doc_img_orientation_classification.html" class="md-tabs__link">
+        <a href="../module_usage/module_overview.html" class="md-tabs__link">
           
   
   
@@ -487,7 +487,7 @@ You're not viewing the latest version.
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="formula_recognition.html" class="md-tabs__link">
+        <a href="pipeline_overview.html" class="md-tabs__link">
           
   
   
@@ -1088,6 +1088,10 @@ You're not viewing the latest version.
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1159,7 +1163,7 @@ You're not viewing the latest version.
   
   
   <span class="md-ellipsis">
-    获取onnx模型
+    获取ONNX模型
     
   </span>
   
@@ -1216,6 +1220,52 @@ You're not viewing the latest version.
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/python_and_cpp_infer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    基于Python或C++预测引擎推理
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/mcp_server.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MCP 服务器
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1231,6 +1281,8 @@ You're not viewing the latest version.
   
     
     
+      
+        
       
         
       
@@ -1291,6 +1343,29 @@ You're not viewing the latest version.
             模块列表
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module_usage/module_overview.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    模块概述
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1529,7 +1604,7 @@ You're not viewing the latest version.
   
   
     <li class="md-nav__item">
-      <a href="../module_usage/text_line_orientation_classification.html" class="md-nav__link">
+      <a href="../module_usage/textline_orientation_classification.html" class="md-nav__link">
         
   
   
@@ -1596,6 +1671,8 @@ You're not viewing the latest version.
       
         
       
+        
+      
     
     
     
@@ -1632,6 +1709,29 @@ You're not viewing the latest version.
             产线列表
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pipeline_overview.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    产线概述
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2014,6 +2114,8 @@ You're not viewing the latest version.
       
         
       
+        
+      
     
     
     
@@ -2109,6 +2211,29 @@ You're not viewing the latest version.
   
   <span class="md-ellipsis">
     配置 PaddleOCR 推理包日志系统
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="instructions/parallel_inference.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    产线并行推理
     
   </span>
   
@@ -3236,63 +3361,59 @@ You're not viewing the latest version.
 <tbody>
 <tr>
 <td><code>input</code></td>
-<td>待预测数据，支持多种输入类型，必填。
-<ul>
-<li><b>Python Var</b>：如 <code>numpy.ndarray</code> 表示的图像数据</li>
-<li><b>str</b>：如图像文件或者PDF文件的本地路径：<code>/root/data/img.jpg</code>；<b>如URL链接</b>，如图像文件或PDF文件的网络URL：<a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/general_doc_preprocessor_002.png">示例</a>；<b>如本地目录</b>，该目录下需包含待预测图像，如本地路径：<code>/root/data/</code>(当前不支持目录中包含PDF文件的预测，PDF文件需要指定到具体文件路径)</li>
-<li><b>List</b>：列表元素需为上述类型数据，如<code>[numpy.ndarray, numpy.ndarray]</code>，<code>["/root/data/img1.jpg", "/root/data/img2.jpg"]</code>，<code>["/root/data1", "/root/data2"]</code></li>
-</ul>
+<td>待预测数据，必填。
+如图像文件或者PDF文件的本地路径：<code>/root/data/img.jpg</code>；<b>如URL链接</b>，如图像文件或PDF文件的网络URL：<a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/demo_image/doc_test_rotated.jpg">示例</a>；<b>如本地目录</b>，该目录下需包含待预测图像，如本地路径：<code>/root/data/</code>(当前不支持目录中包含PDF文件的预测，PDF文件需要指定到具体文件路径)。
 </td>
-<td><code>Python Var|str|list</code></td>
+<td><code>str</code></td>
 <td></td>
 </tr>
 <tr>
 <td><code>save_path</code></td>
-<td>指定推理结果文件保存的路径。如果设置为<code>None</code>, 推理结果将不会保存到本地。</td>
+<td>指定推理结果文件保存的路径。如果不设置，推理结果将不会保存到本地。</td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>doc_orientation_classify_model_name</code></td>
-<td>文档方向分类模型的名称。如果设置为<code>None</code>, 将会使用产线默认模型。</td>
+<td>文档方向分类模型的名称。如果不设置，将会使用产线默认模型。</td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>doc_orientation_classify_model_dir</code></td>
-<td>文档方向分类模型的目录路径。如果设置为<code>None</code>, 将会下载官方模型。</td>
+<td>文档方向分类模型的目录路径。如果不设置，将会下载官方模型。</td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>doc_unwarping_model_name</code></td>
-<td>文本图像矫正模型的名称。如果设置为<code>None</code>, 将会使用产线默认模型。</td>
+<td>文本图像矫正模型的名称。如果不设置，将会使用产线默认模型。</td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>doc_unwarping_model_dir</code></td>
-<td>文本图像矫正模型的目录路径。如果设置为<code>None</code>, 将会下载官方模型。</td>
+<td>文本图像矫正模型的目录路径。如果不设置，将会下载官方模型。</td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>use_doc_orientation_classify</code></td>
-<td>是否加载文档方向分类模块。如果设置为<code>None</code>, 将默认使用产线初始化的该参数值，初始化为<code>True</code>。
+<td>是否加载并使用文档方向分类模块。如果不设置，将默认使用产线初始化的该参数值，初始化为<code>True</code>。
 </td>
 <td><code>bool</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>use_doc_unwarping</code></td>
-<td>是否加载文本图像矫正模块。如果设置为<code>None</code>, 将默认使用产线初始化的该参数值，初始化为<code>True</code>。
+<td>是否加载并使用文本图像矫正模块。如果不设置，将默认使用产线初始化的该参数值，初始化为<code>True</code>。
 </td>
 <td><code>bool</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>device</code></td>
-<td>用于推理的设备。支持指定具体卡号。
+<td>用于推理的设备。支持指定具体卡号：
 <ul>
 <li><b>CPU</b>：如 <code>cpu</code> 表示使用 CPU 进行推理；</li>
 <li><b>GPU</b>：如 <code>gpu:0</code> 表示使用第 1 块 GPU 进行推理；</li>
@@ -3300,11 +3421,10 @@ You're not viewing the latest version.
 <li><b>XPU</b>：如 <code>xpu:0</code> 表示使用第 1 块 XPU 进行推理；</li>
 <li><b>MLU</b>：如 <code>mlu:0</code> 表示使用第 1 块 MLU 进行推理；</li>
 <li><b>DCU</b>：如 <code>dcu:0</code> 表示使用第 1 块 DCU 进行推理；</li>
-<li><b>None</b>：如果设置为 <code>None</code>, 将默认使用产线初始化的该参数值，初始化时，会优先使用本地的 GPU 0号设备，如果没有，则使用 CPU 设备；</li>
-</ul>
+</ul>如果不设置，将默认使用产线初始化的该参数值，初始化时，会优先使用本地的 GPU 0号设备，如果没有，则使用 CPU 设备。
 </td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 <tr>
 <td><code>enable_hpi</code></td>
@@ -3314,15 +3434,12 @@ You're not viewing the latest version.
 </tr>
 <tr>
 <td><code>use_tensorrt</code></td>
-<td>是否使用 TensorRT 进行推理加速。</td>
+<td>是否启用 Paddle Inference 的 TensorRT 子图引擎。</br>
+对于 CUDA 11.8 版本的飞桨，兼容的 TensorRT 版本为 8.x（x>=6），建议安装 TensorRT 8.6.1.6。</br>
+对于 CUDA 12.6 版本的飞桨，兼容的 TensorRT 版本为 10.x（x>=5），建议安装 TensorRT 10.5.0.18。
+</td>
 <td><code>bool</code></td>
 <td><code>False</code></td>
-</tr>
-<tr>
-<td><code>min_subgraph_size</code></td>
-<td>最小子图大小，用于优化模型子图的计算。</td>
-<td><code>int</code></td>
-<td><code>3</code></td>
 </tr>
 <tr>
 <td><code>precision</code></td>
@@ -3332,10 +3449,18 @@ You're not viewing the latest version.
 </tr>
 <tr>
 <td><code>enable_mkldnn</code></td>
-<td>是否启用 MKL-DNN 加速库。如果设置为<code>None</code>, 将默认启用。
+<td>是否启用 MKL-DNN 加速推理。如果 MKL-DNN 不可用或模型不支持通过 MKL-DNN 加速，即使设置了此标志，也不会使用加速。
 </td>
 <td><code>bool</code></td>
-<td><code>None</code></td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>mkldnn_cache_capacity</code></td>
+<td>
+MKL-DNN 缓存容量。
+</td>
+<td><code>int</code></td>
+<td><code>10</code></td>
 </tr>
 <tr>
 <td><code>cpu_threads</code></td>
@@ -3347,7 +3472,7 @@ You're not viewing the latest version.
 <td><code>paddlex_config</code></td>
 <td>PaddleX产线配置文件路径。</td>
 <td><code>str</code></td>
-<td><code>None</code></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -3386,45 +3511,45 @@ You're not viewing the latest version.
 <tbody>
 <tr>
 <td><code>doc_orientation_classify_model_name</code></td>
-<td>文档方向分类模型的名称。如果设置为<code>None</code>, 将会使用产线默认模型。</td>
+<td>文档方向分类模型的名称。如果设置为<code>None</code>，将会使用产线默认模型。</td>
 <td><code>str</code></td>
 <td><code>None</code></td>
 </tr>
 <tr>
 <td><code>doc_orientation_classify_model_dir</code></td>
-<td>文档方向分类模型的目录路径。如果设置为<code>None</code>, 将会下载官方模型。</td>
+<td>文档方向分类模型的目录路径。如果设置为<code>None</code>，将会下载官方模型。</td>
 <td><code>str</code></td>
 <td><code>None</code></td>
 </tr>
 <tr>
 <td><code>doc_unwarping_model_name</code></td>
-<td>文本图像矫正模型的名称。如果设置为<code>None</code>, 将会使用产线默认模型。</td>
+<td>文本图像矫正模型的名称。如果设置为<code>None</code>，将会使用产线默认模型。</td>
 <td><code>str</code></td>
 <td><code>None</code></td>
 </tr>
 <tr>
 <td><code>doc_unwarping_model_dir</code></td>
-<td>文本图像矫正模型的目录路径。如果设置为<code>None</code>, 将会下载官方模型。</td>
+<td>文本图像矫正模型的目录路径。如果设置为<code>None</code>，将会下载官方模型。</td>
 <td><code>str</code></td>
 <td><code>None</code></td>
 </tr>
 <tr>
 <td><code>use_doc_orientation_classify</code></td>
-<td>是否加载文档方向分类模块。如果设置为<code>None</code>, 将默认使用产线初始化的该参数值，初始化为<code>True</code>。
+<td>是否加载并使用文档方向分类模块。如果设置为<code>None</code>，将默认使用产线初始化的该参数值，初始化为<code>True</code>。
 </td>
 <td><code>bool</code></td>
 <td><code>None</code></td>
 </tr>
 <tr>
 <td><code>use_doc_unwarping</code></td>
-<td>是否加载文本图像矫正模块。如果设置为<code>None</code>, 将默认使用产线初始化的该参数值，初始化为<code>True</code>。
+<td>是否加载并使用文本图像矫正模块。如果设置为<code>None</code>，将默认使用产线初始化的该参数值，初始化为<code>True</code>。
 </td>
 <td><code>bool</code></td>
 <td><code>None</code></td>
 </tr>
 <tr>
 <td><code>device</code></td>
-<td>用于推理的设备。支持指定具体卡号。
+<td>用于推理的设备。支持指定具体卡号：
 <ul>
 <li><b>CPU</b>：如 <code>cpu</code> 表示使用 CPU 进行推理；</li>
 <li><b>GPU</b>：如 <code>gpu:0</code> 表示使用第 1 块 GPU 进行推理；</li>
@@ -3432,7 +3557,7 @@ You're not viewing the latest version.
 <li><b>XPU</b>：如 <code>xpu:0</code> 表示使用第 1 块 XPU 进行推理；</li>
 <li><b>MLU</b>：如 <code>mlu:0</code> 表示使用第 1 块 MLU 进行推理；</li>
 <li><b>DCU</b>：如 <code>dcu:0</code> 表示使用第 1 块 DCU 进行推理；</li>
-<li><b>None</b>：如果设置为 <code>None</code>, 将默认使用产线初始化的该参数值，初始化时，会优先使用本地的 GPU 0号设备，如果没有，则使用 CPU 设备；</li>
+<li><b>None</b>：如果设置为<code>None</code>，将默认使用产线初始化的该参数值，初始化时，会优先使用本地的 GPU 0号设备，如果没有，则使用 CPU 设备。</li>
 </ul>
 </td>
 <td><code>str</code></td>
@@ -3446,28 +3571,33 @@ You're not viewing the latest version.
 </tr>
 <tr>
 <td><code>use_tensorrt</code></td>
-<td>是否使用 TensorRT 进行推理加速。</td>
+<td>是否启用 Paddle Inference 的 TensorRT 子图引擎。</br>
+对于 CUDA 11.8 版本的飞桨，兼容的 TensorRT 版本为 8.x（x>=6），建议安装 TensorRT 8.6.1.6。</br>
+对于 CUDA 12.6 版本的飞桨，兼容的 TensorRT 版本为 10.x（x>=5），建议安装 TensorRT 10.5.0.18。
+</td>
 <td><code>bool</code></td>
 <td><code>False</code></td>
-</tr>
-<tr>
-<td><code>min_subgraph_size</code></td>
-<td>最小子图大小，用于优化模型子图的计算。</td>
-<td><code>int</code></td>
-<td><code>3</code></td>
 </tr>
 <tr>
 <td><code>precision</code></td>
 <td>计算精度，如 fp32、fp16。</td>
 <td><code>str</code></td>
-<td><code>fp32</code></td>
+<td><code>"fp32"</code></td>
 </tr>
 <tr>
 <td><code>enable_mkldnn</code></td>
-<td>是否启用 MKL-DNN 加速库。如果设置为<code>None</code>, 将默认启用。
+<td>是否启用 MKL-DNN 加速推理。如果 MKL-DNN 不可用或模型不支持通过 MKL-DNN 加速，即使设置了此标志，也不会使用加速。
 </td>
 <td><code>bool</code></td>
-<td><code>None</code></td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>mkldnn_cache_capacity</code></td>
+<td>
+MKL-DNN 缓存容量。
+</td>
+<td><code>int</code></td>
+<td><code>10</code></td>
 </tr>
 <tr>
 <td><code>cpu_threads</code></td>
@@ -3500,19 +3630,13 @@ You're not viewing the latest version.
 <td><code>input</code></td>
 <td>待预测数据，支持多种输入类型，必填。
 <ul>
-<li><b>Python Var</b>：如 <code>numpy.ndarray</code> 表示的图像数据</li>
-<li><b>str</b>：如图像文件或者PDF文件的本地路径：<code>/root/data/img.jpg</code>；<b>如URL链接</b>，如图像文件或PDF文件的网络URL：<a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/general_doc_preprocessor_002.png">示例</a>；<b>如本地目录</b>，该目录下需包含待预测图像，如本地路径：<code>/root/data/</code>(当前不支持目录中包含PDF文件的预测，PDF文件需要指定到具体文件路径)</li>
-<li><b>List</b>：列表元素需为上述类型数据，如<code>[numpy.ndarray, numpy.ndarray]</code>，<code>["/root/data/img1.jpg", "/root/data/img2.jpg"]</code>，<code>["/root/data1", "/root/data2"]</code></li>
+<li><b>Python Var</b>：如 <code>numpy.ndarray</code> 表示的图像数据；</li>
+<li><b>str</b>：如图像文件或者PDF文件的本地路径：<code>/root/data/img.jpg</code>；<b>如URL链接</b>，如图像文件或PDF文件的网络URL：<a href="https://paddle-model-ecology.bj.bcebos.com/paddlex/demo_image/doc_test_rotated.jpg">示例</a>；<b>如本地目录</b>，该目录下需包含待预测图像，如本地路径：<code>/root/data/</code>(当前不支持目录中包含PDF文件的预测，PDF文件需要指定到具体文件路径)；</li>
+<li><b>List</b>：列表元素需为上述类型数据，如<code>[numpy.ndarray, numpy.ndarray]</code>，<code>["/root/data/img1.jpg", "/root/data/img2.jpg"]</code>，<code>["/root/data1", "/root/data2"]</code>。</li>
 </ul>
 </td>
 <td><code>Python Var|str|list</code></td>
 <td></td>
-</tr>
-<tr>
-<td><code>device</code></td>
-<td>与实例化时的参数相同。</td>
-<td><code>str</code></td>
-<td><code>None</code></td>
 </tr>
 <tr>
 <td><code>use_doc_orientation_classify</code></td>
@@ -3642,7 +3766,7 @@ You're not viewing the latest version.
 
 <ul>
 <li><code>json</code> 属性获取的预测结果为dict类型的数据，相关内容与调用 <code>save_to_json()</code> 方法保存的内容一致。</li>
-<li><code>img</code> 属性返回的预测结果是一个字典类型的数据。其中，键为 <code>preprocessed_img</code>，对应的值是 <code>Image.Image</code> 对象：用于显示 doc_preprocessor 结果的可视化图像。</li>
+<li><code>img</code> 属性返回的预测结果是一个dict类型的数据。其中，键为 <code>preprocessed_img</code>，对应的值是 <code>Image.Image</code> 对象：用于显示 doc_preprocessor 结果的可视化图像。</li>
 </ul>
 <h2 id="3">3. 开发集成/部署<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
 <p>如果产线可以达到您对产线推理速度和精度的要求，您可以直接进行开发集成/部署。</p>
@@ -3852,6 +3976,404 @@ for i, res in enumerate(result["docPreprocessingResults"]):
         f.write(base64.b64decode(res["outputImage"]))
     print(f"Output image saved at {output_img_path}")
 </code></pre></details>
+
+<details><summary>C++</summary>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include "cpp-httplib/httplib.h" // https://github.com/Huiyicc/cpp-httplib
+#include "nlohmann/json.hpp" // https://github.com/nlohmann/json
+#include "base64.hpp" // https://github.com/tobiaslocker/base64
+
+int main() {
+
+    httplib::Client client("localhost", 8080);
+    const std::string filePath = "./demo.jpg";
+    std::ifstream file(filePath, std::ios::binary | std::ios::ate);
+    if (!file) {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return 1;
+    }
+
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+    std::vector<char> buffer(size);
+    if (!file.read(buffer.data(), size)) {
+        std::cerr << "Error reading file." << std::endl;
+        return 1;
+    }
+
+    std::string bufferStr(buffer.data(), static_cast<size_t>(size));
+    std::string encodedFile = base64::to_base64(bufferStr);
+
+    nlohmann::json jsonObj;
+    jsonObj["file"] = encodedFile;
+    jsonObj["fileType"] = 1;
+
+    auto response = client.Post("/document-preprocessing", jsonObj.dump(), "application/json");
+
+    if (response && response->status == 200) {
+        nlohmann::json jsonResponse = nlohmann::json::parse(response->body);
+        auto result = jsonResponse["result"];
+
+        if (!result.is_object() || !result["docPreprocessingResults"].is_array()) {
+            std::cerr << "Unexpected response format." << std::endl;
+            return 1;
+        }
+
+        for (size_t i = 0; i < result["docPreprocessingResults"].size(); ++i) {
+            auto res = result["docPreprocessingResults"][i];
+
+            if (res.contains("prunedResult")) {
+                std::cout << "Preprocessed result: " << res["prunedResult"].dump() << std::endl;
+            }
+
+            if (res.contains("outputImage")) {
+                std::string outputImgPath = "out_" + std::to_string(i) + ".png";
+                std::string decodedImage = base64::from_base64(res["outputImage"].get<std::string>());
+
+                std::ofstream outFile(outputImgPath, std::ios::binary);
+                if (outFile.is_open()) {
+                    outFile.write(decodedImage.c_str(), decodedImage.size());
+                    outFile.close();
+                    std::cout << "Saved image: " << outputImgPath << std::endl;
+                } else {
+                    std::cerr << "Failed to write image: " << outputImgPath << std::endl;
+                }
+            }
+        }
+    } else {
+        std::cerr << "Request failed." << std::endl;
+        if (response) {
+            std::cerr << "HTTP status: " << response->status << std::endl;
+            std::cerr << "Response body: " << response->body << std::endl;
+        }
+        return 1;
+    }
+
+    return 0;
+}
+
+</code></pre></details>
+
+<details><summary>Java</summary>
+
+<pre><code class="language-java">import okhttp3.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String API_URL = "http://localhost:8080/document-preprocessing";
+        String imagePath = "./demo.jpg";
+
+        File file = new File(imagePath);
+        byte[] fileContent = java.nio.file.Files.readAllBytes(file.toPath());
+        String base64Image = Base64.getEncoder().encodeToString(fileContent);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode payload = objectMapper.createObjectNode();
+        payload.put("file", base64Image);
+        payload.put("fileType", 1);
+
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, payload.toString());
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                JsonNode root = objectMapper.readTree(responseBody);
+                JsonNode result = root.get("result");
+
+                JsonNode docPreprocessingResults = result.get("docPreprocessingResults");
+                for (int i = 0; i < docPreprocessingResults.size(); i++) {
+                    JsonNode item = docPreprocessingResults.get(i);
+                    int finalI = i;
+
+                    JsonNode prunedResult = item.get("prunedResult");
+                    System.out.println("Pruned Result [" + i + "]: " + prunedResult.toString());
+
+                    String outputImgBase64 = item.get("outputImage").asText();
+                    byte[] outputImgBytes = Base64.getDecoder().decode(outputImgBase64);
+                    String outputImgPath = "out_" + finalI + ".png";
+                    try (FileOutputStream fos = new FileOutputStream(outputImgPath)) {
+                        fos.write(outputImgBytes);
+                        System.out.println("Saved output image: " + outputImgPath);
+                    }
+
+                    JsonNode inputImageNode = item.get("inputImage");
+                    if (inputImageNode != null && !inputImageNode.isNull()) {
+                        String inputImageBase64 = inputImageNode.asText();
+                        byte[] inputImageBytes = Base64.getDecoder().decode(inputImageBase64);
+                        String inputImgPath = "inputImage_" + i + ".jpg";
+                        try (FileOutputStream fos = new FileOutputStream(inputImgPath)) {
+                            fos.write(inputImageBytes);
+                            System.out.println("Saved input image to: " + inputImgPath);
+                        }
+                    }
+                }
+            } else {
+                System.err.println("Request failed with HTTP code: " + response.code());
+            }
+        }
+    }
+}
+</code></pre></details>
+
+<details><summary>Go</summary>
+
+<pre><code class="language-go">package main
+
+import (
+    "bytes"
+    "encoding/base64"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "os"
+)
+
+func main() {
+    API_URL := "http://localhost:8080/document-preprocessing"
+    filePath := "./demo.jpg"
+
+    fileBytes, err := ioutil.ReadFile(filePath)
+    if err != nil {
+        fmt.Printf("Error reading file: %v\n", err)
+        return
+    }
+    fileData := base64.StdEncoding.EncodeToString(fileBytes)
+
+    payload := map[string]interface{}{
+        "file":     fileData,
+        "fileType": 1,
+    }
+    payloadBytes, err := json.Marshal(payload)
+    if err != nil {
+        fmt.Printf("Error marshaling payload: %v\n", err)
+        return
+    }
+
+    client := &http.Client{}
+    req, err := http.NewRequest("POST", API_URL, bytes.NewBuffer(payloadBytes))
+    if err != nil {
+        fmt.Printf("Error creating request: %v\n", err)
+        return
+    }
+    req.Header.Set("Content-Type", "application/json")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error sending request: %v\n", err)
+        return
+    }
+    defer res.Body.Close()
+
+    if res.StatusCode != http.StatusOK {
+        fmt.Printf("Unexpected status code: %d\n", res.StatusCode)
+        return
+    }
+
+    body, err := ioutil.ReadAll(res.Body)
+    if err != nil {
+        fmt.Printf("Error reading response body: %v\n", err)
+        return
+    }
+
+    type DocPreprocessingResult struct {
+        PrunedResult         map[string]interface{} `json:"prunedResult"`
+        OutputImage          string                 `json:"outputImage"`
+        DocPreprocessingImage *string               `json:"docPreprocessingImage"`
+        InputImage           *string                `json:"inputImage"`
+    }
+
+    type Response struct {
+        Result struct {
+            DocPreprocessingResults []DocPreprocessingResult `json:"docPreprocessingResults"`
+            DataInfo                interface{}              `json:"dataInfo"`
+        } `json:"result"`
+    }
+
+    var respData Response
+    if err := json.Unmarshal(body, &respData); err != nil {
+        fmt.Printf("Error unmarshaling response: %v\n", err)
+        return
+    }
+
+    for i, res := range respData.Result.DocPreprocessingResults {
+        fmt.Printf("Result %d - prunedResult: %+v\n", i, res.PrunedResult)
+
+        imgBytes, err := base64.StdEncoding.DecodeString(res.OutputImage)
+        if err != nil {
+            fmt.Printf("Error decoding outputImage at index %d: %v\n", i, err)
+            continue
+        }
+
+        filename := fmt.Sprintf("out_%d.png", i)
+        if err := os.WriteFile(filename, imgBytes, 0644); err != nil {
+            fmt.Printf("Error saving image %s: %v\n", filename, err)
+            continue
+        }
+        fmt.Printf("Saved output image to %s\n", filename)
+    }
+}
+</code></pre></details>
+
+<details><summary>C#</summary>
+
+<pre><code class="language-csharp">using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+class Program
+{
+    static readonly string API_URL = "http://localhost:8080/document-preprocessing";
+    static readonly string inputFilePath = "./demo.jpg";
+
+    static async Task Main(string[] args)
+    {
+        var httpClient = new HttpClient();
+
+        byte[] fileBytes = File.ReadAllBytes(inputFilePath);
+        string fileData = Convert.ToBase64String(fileBytes);
+
+        var payload = new JObject
+        {
+            { "file", fileData },
+            { "fileType", 1 }
+        };
+        var content = new StringContent(payload.ToString(), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await httpClient.PostAsync(API_URL, content);
+        response.EnsureSuccessStatusCode();
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+        JObject jsonResponse = JObject.Parse(responseBody);
+
+        JArray docPreResults = (JArray)jsonResponse["result"]["docPreprocessingResults"];
+        for (int i = 0; i < docPreResults.Count; i++)
+        {
+            var res = docPreResults[i];
+            Console.WriteLine($"[{i}] prunedResult:\n{res["prunedResult"]}");
+
+            string base64Image = res["outputImage"]?.ToString();
+            if (!string.IsNullOrEmpty(base64Image))
+            {
+                string outputPath = $"out_{i}.png";
+                byte[] imageBytes = Convert.FromBase64String(base64Image);
+                File.WriteAllBytes(outputPath, imageBytes);
+                Console.WriteLine($"Output image saved at {outputPath}");
+            }
+            else
+            {
+                Console.WriteLine($"outputImage at index {i} is null.");
+            }
+        }
+    }
+}
+</code></pre></details>
+
+<details><summary>Node.js</summary>
+
+<pre><code class="language-js">const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+
+const API_URL = 'http://localhost:8080/document-preprocessing';
+const imagePath = './demo.jpg';
+
+function encodeImageToBase64(filePath) {
+  const bitmap = fs.readFileSync(filePath);
+  return Buffer.from(bitmap).toString('base64');
+}
+
+const payload = {
+  file: encodeImageToBase64(imagePath),
+  fileType: 1
+};
+
+axios.post(API_URL, payload, {
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  maxBodyLength: Infinity
+})
+.then((response) => {
+  const results = response.data.result.docPreprocessingResults;
+
+  results.forEach((res, index) => {
+    console.log(`\n[${index}] prunedResult:`);
+    console.log(res.prunedResult);
+
+    const base64Image = res.outputImage;
+    if (base64Image) {
+      const outputImagePath = `out_${index}.png`;
+      const imageBuffer = Buffer.from(base64Image, 'base64');
+      fs.writeFileSync(outputImagePath, imageBuffer);
+      console.log(`Output image saved at ${outputImagePath}`);
+    } else {
+      console.log(`outputImage at index ${index} is null.`);
+    }
+  });
+})
+.catch((error) => {
+  console.error('API error:', error.message);
+});
+</code></pre></details>
+
+<details><summary>PHP</summary>
+
+<pre><code class="language-php">&lt;?php
+
+$API_URL = "http://localhost:8080/document-preprocessing";
+$image_path = "./demo.jpg";
+$output_image_path = "./out_0.png";
+
+$image_data = base64_encode(file_get_contents($image_path));
+$payload = array("file" => $image_data, "fileType" => 1);
+
+$ch = curl_init($API_URL);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+curl_close($ch);
+
+$result = json_decode($response, true)["result"]["docPreprocessingResults"];
+
+foreach ($result as $i => $item) {
+    echo "[$i] prunedResult:\n";
+    print_r($item["prunedResult"]);
+
+    if (!empty($item["outputImage"])) {
+        $output_image_path = "out_" . $i . ".png";
+        file_put_contents($output_image_path, base64_decode($item["outputImage"]));
+        echo "Output image saved at $output_image_path\n";
+    } else {
+        echo "No outputImage found for item $i\n";
+    }
+}
+?&gt;
+</code></pre></details>
 </details>
 <p><br/></p>
 <h2 id="4">4. 二次开发<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
@@ -3901,7 +4423,7 @@ for i, res in enumerate(result["docPreprocessingResults"]):
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2025年5月22日 13:05:42">2025年5月22日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2025年6月19日 09:52:21 UTC">2025年6月19日</span>
   </span>
 
     
@@ -3911,7 +4433,7 @@ for i, res in enumerate(result["docPreprocessingResults"]):
     <span class="md-icon" title="创建日期">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2025年5月22日 13:05:42">2025年5月22日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2025年6月19日 09:52:21 UTC">2025年6月19日</span>
   </span>
 
     
