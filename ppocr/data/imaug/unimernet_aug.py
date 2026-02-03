@@ -65,7 +65,6 @@ class Dilation(A.ImageOnlyTransform):
 
 
 class Bitmap(A.ImageOnlyTransform):
-
     def __init__(self, value=0, lower=200, always_apply=False, p=0.5):
         super().__init__(always_apply=always_apply, p=p)
         self.lower = lower
@@ -110,7 +109,7 @@ def plasma_fractal(mapsize=256, wibbledecay=3, rng=None):
     'mapsize' must be a power of two.
     """
     assert mapsize & (mapsize - 1) == 0
-    maparray = np.empty((mapsize, mapsize), dtype=np.float_)
+    maparray = np.empty((mapsize, mapsize), dtype=np.float64)
     maparray[0, 0] = 0
     stepsize = mapsize
     wibble = 100
@@ -414,6 +413,13 @@ class Shadow(A.ImageOnlyTransform):
 class UniMERNetTrainTransform:
     def __init__(self, bitmap_prob=0.04, **kwargs):
         self.bitmap_prob = bitmap_prob
+        if tuple(map(int, A.__version__.split("."))) >= (2, 0, 0):
+            new_val = (0, (10 / 255) ** 0.5)
+            GaussNoise = A.GaussNoise(new_val, p=0.2)
+            ImageCompression = A.ImageCompression(quality_range=(95, 100), p=0.3)
+        else:
+            GaussNoise = A.GaussNoise(10, p=0.2)
+            ImageCompression = A.ImageCompression(95, p=0.3)
         self.train_transform = A.Compose(
             [
                 A.Compose(
@@ -441,9 +447,9 @@ class UniMERNetTrainTransform:
                     p=0.15,
                 ),
                 A.RGBShift(r_shift_limit=15, g_shift_limit=15, b_shift_limit=15, p=0.3),
-                A.GaussNoise(10, p=0.2),
+                GaussNoise,
                 A.RandomBrightnessContrast(0.05, (-0.2, 0), True, p=0.2),
-                A.ImageCompression(95, p=0.3),
+                ImageCompression,
                 A.ToGray(always_apply=True),
                 A.Normalize((0.7931, 0.7931, 0.7931), (0.1738, 0.1738, 0.1738)),
             ]

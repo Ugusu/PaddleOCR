@@ -95,10 +95,16 @@ class BaseRecLabelDecode(object):
         for c_i, char in enumerate(text):
             if "\u4e00" <= char <= "\u9fff":
                 c_state = "cn"
-            elif bool(re.search("[a-zA-Z0-9]", char)):
+            # Use \w with UNICODE flag to match letters (including accented chars like ä, ö, ü, é, etc.) and digits
+            # Exclude underscore since \w includes it but we want to treat it as splitter
+            elif bool(re.search(r"[\w]", char, re.UNICODE)) and char != "_":
                 c_state = "en&num"
             else:
                 c_state = "splitter"
+
+            # Handle apostrophes in French words like "n'êtes"
+            if char == "'" and state == "en&num":
+                c_state = "en&num"
 
             if (
                 char == "."
@@ -1218,6 +1224,10 @@ class LaTeXOCRDecode(object):
     """Convert between latex-symbol and symbol-index"""
 
     def __init__(self, rec_char_dict_path, **kwargs):
+        # Set the TOKENIZERS_PARALLELISM environment variable to 'false' to suppress
+        # the warning: "The current process just got forked, Disabling parallelism to avoid deadlocks..
+        #  To disable this warning, please explicitly set TOKENIZERS_PARALLELISM=(true | false)" from tokenizers
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
         from tokenizers import Tokenizer as TokenizerFast
 
         super(LaTeXOCRDecode, self).__init__()
@@ -1285,6 +1295,10 @@ class UniMERNetDecode(object):
         is_infer=False,
         **kwargs,
     ):
+        # Set the TOKENIZERS_PARALLELISM environment variable to 'false' to suppress
+        # the warning: "The current process just got forked, Disabling parallelism to avoid deadlocks..
+        #  To disable this warning, please explicitly set TOKENIZERS_PARALLELISM=(true | false)" from tokenizers
+        os.environ["TOKENIZERS_PARALLELISM"] = "false"
         from tokenizers import Tokenizer as TokenizerFast
         from tokenizers import AddedToken
 

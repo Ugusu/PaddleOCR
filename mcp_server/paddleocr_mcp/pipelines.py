@@ -21,7 +21,6 @@
 import abc
 import asyncio
 import base64
-import contextlib
 import io
 import json
 import re
@@ -32,15 +31,15 @@ from typing import Any, Callable, Dict, List, NoReturn, Optional, Type, Union
 from urllib.parse import urlparse
 
 import httpx
-import magic
 import numpy as np
+import puremagic
 from fastmcp import Context, FastMCP
 from mcp.types import ImageContent, TextContent
 from PIL import Image as PILImage
 from typing_extensions import Literal, Self, assert_never
 
 try:
-    from paddleocr import PaddleOCR, PPStructureV3
+    from paddleocr import PaddleOCR, PaddleOCRVL, PPStructureV3
 
     LOCAL_OCR_AVAILABLE = True
 except ImportError:
@@ -71,7 +70,7 @@ def _is_url(s: str) -> bool:
 
 
 def _infer_file_type_from_bytes(data: bytes) -> Optional[str]:
-    mime = magic.from_buffer(data, mime=True)
+    mime = puremagic.from_string(data, mime=True)
     if mime.startswith("image/"):
         return "image"
     elif mime == "application/pdf":
@@ -120,17 +119,7 @@ class _EngineWrapper:
                 break
             func, args, kwargs, fut = item
             try:
-                # FIXME: PaddleX currently writes to stdout erroneously when
-                # downloading files, which conflicts with the MCP server’s use
-                # of stdout. As a temporary workaround, we use
-                # `redirect_stdout`, but since this redirection is global, it
-                # should not be used inside a worker thread—it may
-                # unintentionally interfere with the MCP server’s normal stdout
-                # behavior. Although we haven’t observed any issues in testing
-                # so far, this workaround should be removed once the PaddleX bug
-                # is fixed.
-                with contextlib.redirect_stdout(io.StringIO()):
-                    result = func(*args, **kwargs)
+                result = func(*args, **kwargs)
                 self._loop.call_soon_threadsafe(fut.set_result, result)
             except Exception as e:
                 self._loop.call_soon_threadsafe(fut.set_exception, e)
@@ -149,6 +138,7 @@ class PipelineHandler(abc.ABC):
         device: Optional[str],
         server_url: Optional[str],
         aistudio_access_token: Optional[str],
+        qianfan_api_key: Optional[str],
         timeout: Optional[int],
     ) -> None:
         """Initialize the pipeline handler.
@@ -160,12 +150,13 @@ class PipelineHandler(abc.ABC):
             device: Device to run inference on.
             server_url: Base URL for service mode.
             aistudio_access_token: AI Studio access token.
+            qianfan_api_key: Qianfan API key.
             timeout: Read timeout in seconds for HTTP requests.
         """
         self._pipeline = pipeline
         if ppocr_source == "local":
             self._mode = "local"
-        elif ppocr_source in ("aistudio", "self_hosted"):
+        elif ppocr_source in ("aistudio", "qianfan", "self_hosted"):
             self._mode = "service"
         else:
             raise ValueError(f"Unknown PaddleOCR source {repr(ppocr_source)}")
@@ -174,6 +165,7 @@ class PipelineHandler(abc.ABC):
         self._device = device
         self._server_url = server_url
         self._aistudio_access_token = aistudio_access_token
+        self._qianfan_api_key = qianfan_api_key
         self._timeout = timeout or 60
 
         if self._mode == "local":
@@ -422,7 +414,7 @@ class SimpleInferencePipelineHandler(PipelineHandler):
                 image_arr = np.array(image_pil.convert("RGB"))
                 return np.ascontiguousarray(image_arr[..., ::-1])
             except Exception as e:
-                raise ValueError(f"Failed to decode Base64 image: {e}")
+                raise ValueError(f"Failed to decode Base64 image: {str(e)}") from e
         elif _is_file_path(input_data) or _is_url(input_data):
             return input_data
         else:
@@ -450,11 +442,11 @@ class SimpleInferencePipelineHandler(PipelineHandler):
                 if file_type_str is None:
                     raise ValueError(
                         "Unsupported file type in Base64 data. "
-                        "Only image files (JPEG, PNG, etc.) and PDF documents are supported."
+                        "Only images (JPEG, PNG, etc.) and PDF documents are supported."
                     )
                 return input_data, file_type_str
             except Exception as e:
-                raise ValueError(f"Failed to decode Base64 data: {e}")
+                raise ValueError(f"Failed to decode Base64 data: {str(e)}") from e
         elif _is_file_path(input_data):
             try:
                 with open(input_data, "rb") as f:
@@ -464,11 +456,11 @@ class SimpleInferencePipelineHandler(PipelineHandler):
                 if file_type_str is None:
                     raise ValueError(
                         f"Unsupported file type for '{input_data}'. "
-                        "Only image files (JPEG, PNG, etc.) and PDF documents are supported."
+                        "Only images (JPEG, PNG, etc.) and PDF documents are supported."
                     )
                 return input_data, file_type_str
             except Exception as e:
-                raise ValueError(f"Failed to read file: {e}")
+                raise ValueError(f"Failed to read file: {str(e)}") from e
         else:
             raise ValueError("Invalid input data format")
 
@@ -483,7 +475,9 @@ class SimpleInferencePipelineHandler(PipelineHandler):
             raise RuntimeError("Server URL not configured")
 
         endpoint = self._get_service_endpoint()
-        url = f"{self._server_url.rstrip('/')}/{endpoint.lstrip('/')}"
+        if endpoint:
+            endpoint = "/" + endpoint
+        url = f"{self._server_url.rstrip('/')}{endpoint}"
 
         payload = self._prepare_service_payload(processed_input, file_type, **kwargs)
         headers = {"Content-Type": "application/json"}
@@ -492,6 +486,10 @@ class SimpleInferencePipelineHandler(PipelineHandler):
             if not self._aistudio_access_token:
                 raise RuntimeError("Missing AI Studio access token")
             headers["Authorization"] = f"token {self._aistudio_access_token}"
+        elif self._ppocr_source == "qianfan":
+            if not self._qianfan_api_key:
+                raise RuntimeError("Missing Qianfan API key")
+            headers["Authorization"] = f"Bearer {self._qianfan_api_key}"
 
         try:
             timeout = httpx.Timeout(
@@ -572,36 +570,36 @@ class OCRHandler(SimpleInferencePipelineHandler):
         }
 
     async def _parse_local_result(self, local_result: Dict, ctx: Context) -> Dict:
-        result = local_result[0]
-        texts = result["rec_texts"]
-        scores = result["rec_scores"]
-        boxes = result["rec_boxes"]
+        clean_texts, confidences, text_lines = [], [], []
 
-        clean_texts, confidences, instances = [], [], []
+        for result in local_result:
+            texts = result["rec_texts"]
+            scores = result["rec_scores"]
+            boxes = result["rec_boxes"]
 
-        for i, text in enumerate(texts):
-            if text and text.strip():
-                conf = scores[i] if i < len(scores) else 0
-                clean_texts.append(text.strip())
-                confidences.append(conf)
-                instance = {
-                    "text": text.strip(),
-                    "confidence": round(conf, 3),
-                    "bbox": boxes[i].tolist(),
-                }
-                instances.append(instance)
+            for i, text in enumerate(texts):
+                if text and text.strip():
+                    conf = scores[i] if i < len(scores) else 0
+                    clean_texts.append(text.strip())
+                    confidences.append(conf)
+                    instance = {
+                        "text": text.strip(),
+                        "confidence": round(conf, 3),
+                        "bbox": boxes[i].tolist(),
+                    }
+                    text_lines.append(instance)
 
         return {
             "text": "\n".join(clean_texts),
             "confidence": sum(confidences) / len(confidences) if confidences else 0,
-            "instances": instances,
+            "text_lines": text_lines,
         }
 
     async def _parse_service_result(self, service_result: Dict, ctx: Context) -> Dict:
         result_data = service_result.get("result", service_result)
         ocr_results = result_data.get("ocrResults")
 
-        all_texts, all_confidences, instances = [], [], []
+        all_texts, all_confidences, text_lines = [], [], []
 
         for ocr_result in ocr_results:
             pruned = ocr_result["prunedResult"]
@@ -620,21 +618,21 @@ class OCRHandler(SimpleInferencePipelineHandler):
                         "confidence": round(conf, 3),
                         "bbox": boxes[i],
                     }
-                    instances.append(instance)
+                    text_lines.append(instance)
 
         return {
             "text": "\n".join(all_texts),
             "confidence": (
                 sum(all_confidences) / len(all_confidences) if all_confidences else 0
             ),
-            "instances": instances,
+            "text_lines": text_lines,
         }
 
     async def _log_completion_stats(self, result: Dict, ctx: Context) -> None:
         text_length = len(result["text"])
-        instance_count = len(result["instances"])
+        text_line_count = len(result["text_lines"])
         await ctx.info(
-            f"OCR completed: {text_length} characters, {instance_count} text instances"
+            f"OCR completed: {text_length} characters, {text_line_count} text lines"
         )
 
     async def _format_output(
@@ -655,55 +653,18 @@ class OCRHandler(SimpleInferencePipelineHandler):
             return json.dumps(result, ensure_ascii=False, indent=2)
         else:
             confidence = result["confidence"]
-            instance_count = len(result["instances"])
+            text_line_count = len(result["text_lines"])
 
             output = result["text"]
             if confidence > 0:
-                output += f"\n\n📊 Confidence: {(confidence * 100):.1f}% | {instance_count} text instances"
+                output += f"\n\n📊 Confidence: {(confidence * 100):.1f}% | {text_line_count} text lines"
 
             return output
 
 
-class PPStructureV3Handler(SimpleInferencePipelineHandler):
-    def register_tools(self, mcp: FastMCP) -> None:
-        @mcp.tool("pp_structurev3")
-        async def _pp_structurev3(
-            input_data: str,
-            output_mode: OutputMode = "simple",
-            file_type: Optional[str] = None,
-            return_images: bool = True,
-            *,
-            ctx: Context,
-        ) -> Union[str, List[Union[TextContent, ImageContent]]]:
-            """Extracts structured markdown from complex documents (images/PDFs), including tables, formulas, etc. Accepts file path, URL, or Base64.
-
-            Args:
-                input_data: The file to process (file path, URL, or Base64 string).
-                output_mode: The desired output format.
-                    - "simple": (Default) Clean, readable markdown with embedded images. Best for most use cases.
-                    - "detailed": JSON data about document structure, plus markdown. Only use this when coordinates are specifically required.
-                file_type: File type. This parameter is REQUIRED when `input_data` is a URL and should be omitted for other types.
-                    - "image": For image files
-                    - "pdf": For PDF documents
-                    - None: For unknown file types
-                return_images: Whether to return the images extracted from the document.
-            """
-            return await self.process(
-                input_data,
-                output_mode,
-                ctx,
-                file_type,
-                format_kwargs={"return_images": return_images},
-            )
-
-    def _create_local_engine(self) -> Any:
-        return PPStructureV3(
-            paddlex_config=self._pipeline_config,
-            device=self._device,
-        )
-
+class _LayoutParsingHandler(SimpleInferencePipelineHandler):
     def _get_service_endpoint(self) -> str:
-        return "layout-parsing"
+        return "layout-parsing" if self._ppocr_source != "qianfan" else "paddleocr"
 
     def _transform_local_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
         return {
@@ -787,7 +748,9 @@ class PPStructureV3Handler(SimpleInferencePipelineHandler):
                     img_bytes = response.content
                     return base64.b64encode(img_bytes).decode("ascii")
             except Exception as e:
-                await ctx.error(f"Failed to download image from URL {img_data}: {e}")
+                await ctx.error(
+                    f"Failed to download image from URL {img_data}: {str(e)}"
+                )
                 return img_data
         elif _is_base64(img_data):
             return img_data
@@ -877,9 +840,100 @@ class PPStructureV3Handler(SimpleInferencePipelineHandler):
         return content_list or [TextContent(type="text", text=markdown_text)]
 
 
+class PPStructureV3Handler(_LayoutParsingHandler):
+    def register_tools(self, mcp: FastMCP) -> None:
+        @mcp.tool("pp_structurev3")
+        async def _pp_structurev3(
+            input_data: str,
+            output_mode: OutputMode = "simple",
+            file_type: Optional[str] = None,
+            return_images: bool = True,
+            *,
+            ctx: Context,
+        ) -> Union[str, List[Union[TextContent, ImageContent]]]:
+            """Extracts structured markdown from complex documents (images/PDFs), including tables, formulas, etc. Accepts file path, URL, or Base64.
+
+            Args:
+                input_data: The file to process (file path, URL, or Base64 string).
+                output_mode: The desired output format.
+                    - "simple": (Default) Clean, readable markdown with embedded images. Best for most use cases.
+                    - "detailed": JSON data about document structure, plus markdown. Only use this when coordinates are specifically required.
+                file_type: File type. This parameter is REQUIRED when `input_data` is a URL and should be omitted for other types.
+                    - "image": For image files
+                    - "pdf": For PDF documents
+                    - None: For unknown file types
+                return_images: Whether to return the images extracted from the document.
+            """
+            return await self.process(
+                input_data,
+                output_mode,
+                ctx,
+                file_type,
+                format_kwargs={"return_images": return_images},
+            )
+
+    def _create_local_engine(self) -> Any:
+        return PPStructureV3(
+            paddlex_config=self._pipeline_config,
+            device=self._device,
+        )
+
+    def _transform_service_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+        kwargs = super()._transform_service_kwargs(kwargs)
+        if self._ppocr_source == "qianfan":
+            kwargs["model"] = "pp-structurev3"
+        return kwargs
+
+
+class PaddleOCRVLHandler(_LayoutParsingHandler):
+    def register_tools(self, mcp: FastMCP) -> None:
+        @mcp.tool("paddleocr_vl")
+        async def _paddleocr_vl(
+            input_data: str,
+            output_mode: OutputMode = "simple",
+            file_type: Optional[str] = None,
+            return_images: bool = True,
+            *,
+            ctx: Context,
+        ) -> Union[str, List[Union[TextContent, ImageContent]]]:
+            """Extracts structured markdown from complex documents (images/PDFs) using a VLM-based approach. The extracted elements include tables, formulas, etc. Accepts file path, URL, or Base64.
+
+            Args:
+                input_data: The file to process (file path, URL, or Base64 string).
+                output_mode: The desired output format.
+                    - "simple": (Default) Clean, readable markdown with embedded images. Best for most use cases.
+                    - "detailed": JSON data about document structure, plus markdown. Only use this when coordinates are specifically required.
+                file_type: File type. This parameter is REQUIRED when `input_data` is a URL and should be omitted for other types.
+                    - "image": For image files
+                    - "pdf": For PDF documents
+                    - None: For unknown file types
+                return_images: Whether to return the images extracted from the document.
+            """
+            return await self.process(
+                input_data,
+                output_mode,
+                ctx,
+                file_type,
+                format_kwargs={"return_images": return_images},
+            )
+
+    def _create_local_engine(self) -> Any:
+        return PaddleOCRVL(
+            paddlex_config=self._pipeline_config,
+            device=self._device,
+        )
+
+    def _transform_service_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+        kwargs = super()._transform_service_kwargs(kwargs)
+        if self._ppocr_source == "qianfan":
+            kwargs["model"] = "paddleocr-vl-0.9b"
+        return kwargs
+
+
 _PIPELINE_HANDLERS: Dict[str, Type[PipelineHandler]] = {
     "OCR": OCRHandler,
     "PP-StructureV3": PPStructureV3Handler,
+    "PaddleOCR-VL": PaddleOCRVLHandler,
 }
 
 

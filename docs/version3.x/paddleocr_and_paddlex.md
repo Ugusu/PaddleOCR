@@ -1,3 +1,7 @@
+---
+comments: true
+---
+
 # PaddleOCR 与 PaddleX
 
 [PaddleX](https://github.com/PaddlePaddle/PaddleX) 是一款基于飞桨框架构建的低代码开发工具，集成了众多开箱即用的预训练模型，支持模型从训练到推理的全流程开发，兼容多款国内外主流硬件，助力 AI 开发者在产业实践中高效落地。
@@ -26,19 +30,25 @@ PaddleOCR、PaddleX 和飞桨框架的版本存在如下对应关系：
 | `3.0.1` | `3.0.1` | `>= 3.0.0` |
 | `3.0.2` | `3.0.2` | `>= 3.0.0` |
 | `3.0.3` | `>= 3.0.3` | `>= 3.0.0` |
+| `3.1.x` | `>= 3.1.0, < 3.2.0` | `>= 3.0.0` |
+| `3.2.x` | `>= 3.2.0, < 3.3.0` | `>= 3.0.0` |
+| `3.3.x` | `>= 3.3.0, < 3.4.0` | `>= 3.0.0` |
+| `3.4.x` | `>= 3.4.0, < 3.5.0` | `>= 3.0.0` |
 
 ## 2. PaddleOCR 产线与 PaddleX 产线注册名的对应关系
 
 | PaddleOCR 产线 | PaddleX 产线注册名 |
 | --- | --- |
 | 通用 OCR | `OCR` |
-| 通用版面解析 v3 | `PP-StructureV3` |
-| 文档场景信息抽取 v4 | `PP-ChatOCRv4-doc` |
+| PP-StructureV3 | `PP-StructureV3` |
+| PP-ChatOCRv4 | `PP-ChatOCRv4-doc` |
 | 通用表格识别 v2 | `table_recognition_v2` |
 | 公式识别 | `formula_recognition` |
 | 印章文本识别 | `seal_recognition` |
 | 文档图像预处理 | `doc_preprocessor` |
 | 文档理解 | `doc_understanding` |
+| PP-DocTranslation | `PP-DocTranslation` |
+| PaddleOCR-VL | `PaddleOCR-VL`、`PaddleOCR-VL-1.5` |
 
 ## 3. 使用 PaddleX 产线配置文件
 
@@ -66,7 +76,7 @@ paddlex --get_pipeline_config OCR
 
 ### 3.2 编辑产线配置文件
 
-导出的 PaddleX 产线配置文件不仅包含 PaddleOCR CLI 和 Python API 支持的参数，还可进行更多高级配置。请在 [PaddleX模型产线使用概览](https://paddlepaddle.github.io/PaddleX/3.0/pipeline_usage/pipeline_develop_guide.html) 中找到对应的产线使用教程，参考其中的详细说明，根据需求调整各项配置。
+导出的 PaddleX 产线配置文件不仅包含 PaddleOCR CLI 和 Python API 支持的参数，还可进行更多高级配置。请在 [PaddleX模型产线使用概览](https://paddlepaddle.github.io/PaddleX/latest/pipeline_usage/pipeline_develop_guide.html) 中找到对应的产线使用教程，参考其中的详细说明，根据需求调整各项配置。
 
 ### 3.3 在 CLI 中加载产线配置文件
 
