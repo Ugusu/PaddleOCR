@@ -29,7 +29,7 @@
       
       
       <link rel="icon" href="../../../version3.x/logo.jpg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -1462,6 +1462,10 @@ You're not viewing the latest version.
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1605,7 +1609,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL NVIDIA Blackwell-Architecture GPUs Environment Configuration Tutorial
+    PaddleOCR-VL NVIDIA Blackwell-Architecture GPUs Usage Tutorial
   
 
     
@@ -1626,14 +1630,14 @@ You're not viewing the latest version.
   
   
     <li class="md-nav__item">
-      <a href="PaddleOCR-VL-KUNLUNXIN-XPU.html" class="md-nav__link">
+      <a href="PaddleOCR-VL-Kunlunxin-XPU.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL KUNLUNXIN XPU Environment Configuration Tutorial
+    PaddleOCR-VL Kunlunxin XPU Usage Tutorial
   
 
     
@@ -1654,14 +1658,14 @@ You're not viewing the latest version.
   
   
     <li class="md-nav__item">
-      <a href="PaddleOCR-VL-HYGON-DCU.html" class="md-nav__link">
+      <a href="PaddleOCR-VL-Hygon-DCU.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL HYGON DCU Environment Configuration Tutorial
+    PaddleOCR-VL Hygon DCU Usage Tutorial
   
 
     
@@ -1689,7 +1693,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL MetaX GPU Environment Configuration Tutorial
+    PaddleOCR-VL MetaX GPU Usage Tutorial
   
 
     
@@ -1717,7 +1721,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL Iluvatar GPU Environment Configuration Tutorial
+    PaddleOCR-VL Iluvatar GPU Usage Tutorial
   
 
     
@@ -1745,7 +1749,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL Huawei Ascend NPU Environment Configuration Tutorial
+    PaddleOCR-VL Huawei Ascend NPU Usage Tutorial
   
 
     
@@ -1773,7 +1777,63 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL Apple Silicon Environment Configuration Tutorial
+    PaddleOCR-VL Apple Silicon Usage Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="PaddleOCR-VL-AMD-GPU.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PaddleOCR-VL AMD GPU Usage Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="PaddleOCR-VL-Intel-Arc-GPU.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PaddleOCR-VL Intel Arc GPU Usage Tutorial
   
 
     
@@ -1964,7 +2024,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    Sever Deployment
+    Server Deployment
   
 
     
@@ -3995,7 +4055,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    Sever Deployment
+    Server Deployment
   
 
     
@@ -6141,7 +6201,7 @@ If MKL-DNN is unavailable or the model does not support it, acceleration will no
        [ 13, ..., 777]], dtype=int16)}}}
 </code></pre></details>
 
-<p>For explanation of the result parameters, refer to <a href="#222-python-script-integration">2.2 Python Script Integration</a>.</p>
+<p>For explanation of the result parameters, refer to <a href="#22-python-script-integration">2.2 Python Script Integration</a>.</p>
 <p><b>Note:</b> Due to the large size of the default model in the pipeline, the inference speed may be slow. You can refer to the model list in Section 1 to replace it with a faster model.</p>
 <h3 id="22-python-script-integration">2.2 Python Script Integration<a class="headerlink" href="#22-python-script-integration" title="Permanent link">&para;</a></h3>
 <p>The command line method is for quick testing and visualization. In actual projects, you usually need to integrate the model via code. You can perform pipeline inference with just a few lines of code as shown below:</p>
@@ -6158,6 +6218,7 @@ If MKL-DNN is unavailable or the model does not support it, acceleration will no
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">res</span><span class="o">.</span><span class="n">print</span><span class="p">()</span> <span class="c1">## Print the structured prediction output</span>
 </span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">res</span><span class="o">.</span><span class="n">save_to_json</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">)</span> <span class="c1">## Save the current image&#39;s structured result in JSON format</span>
 </span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">res</span><span class="o">.</span><span class="n">save_to_markdown</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">)</span> <span class="c1">## Save the current image&#39;s result in Markdown format</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">res</span><span class="o">.</span><span class="n">save_to_word</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">)</span> <span class="c1">## Save the current image&#39;s result in Word format</span>
 </span></code></pre></div>
 <p>For PDF files, each page will be processed individually and generate a separate Markdown file. If you want to convert the entire PDF to a single Markdown file, use the following method:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -7216,6 +7277,14 @@ If enabled, the cell detection model will not be used, and only the table struct
 <td>None</td>
 </tr>
 <tr>
+<td><code>save_to_word()</code></td>
+<td>Save the layout parsing results as a Word (.docx) format file</td>
+<td><code>save_path</code></td>
+<td><code>str</code></td>
+<td>Path to save the file, supports directory or file path.</td>
+<td>None</td>
+</tr>
+<tr>
 <td><code>save_to_markdown()</code></td>
 <td>Save each page of an image or PDF file as a markdown file</td>
 <td><code>save_path</code></td>
@@ -7387,7 +7456,7 @@ Additionally, you can access the prediction results and visual images through th
 
 <h2 id="3-development-integration-deployment">3. Development Integration / Deployment<a class="headerlink" href="#3-development-integration-deployment" title="Permanent link">&para;</a></h2>
 <p>If the pipeline meets your requirements for inference speed and accuracy, you can proceed with development integration or deployment.</p>
-<p>If you want to directly use the pipeline in your Python project, refer to the example code in <a href="#22-python脚本方式集成">2.2 Python script mode</a>.</p>
+<p>If you want to directly use the pipeline in your Python project, refer to the example code in <a href="#22-python-script-integration">2.2 Python script mode</a>.</p>
 <p>In addition, PaddleOCR provides two other deployment options described in detail below:</p>
 <p>🚀 High-Performance Inference: In production environments, many applications have strict performance requirements (especially response speed) to ensure system efficiency and smooth user experience. PaddleOCR offers a high-performance inference option that deeply optimizes model inference and pre/post-processing for significant end-to-end acceleration. For detailed high-performance inference workflow, refer to <a href="../deployment/high_performance_inference.html">High Performance Inference</a>.</p>
 <p>☁️ Service Deployment: Service-based deployment is common in production. It encapsulates the inference logic as a service, allowing clients to access it via network requests to obtain results. For detailed instructions on service deployment, refer to <a href="../deployment/serving.html">Service Deployment</a>.</p>

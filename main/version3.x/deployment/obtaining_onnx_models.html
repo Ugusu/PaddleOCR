@@ -29,7 +29,7 @@
       
       
       <link rel="icon" href="../logo.jpg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -1301,6 +1301,10 @@ You're not viewing the latest version.
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1444,7 +1448,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL NVIDIA Blackwell 架构 GPU 环境配置教程
+    PaddleOCR-VL NVIDIA Blackwell 架构 GPU 使用教程
   
 
     
@@ -1465,14 +1469,14 @@ You're not viewing the latest version.
   
   
     <li class="md-nav__item">
-      <a href="../pipeline_usage/PaddleOCR-VL-KUNLUNXIN-XPU.html" class="md-nav__link">
+      <a href="../pipeline_usage/PaddleOCR-VL-Kunlunxin-XPU.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL 昆仑芯 XPU 环境配置教程
+    PaddleOCR-VL 昆仑芯 XPU 使用教程
   
 
     
@@ -1493,14 +1497,14 @@ You're not viewing the latest version.
   
   
     <li class="md-nav__item">
-      <a href="../pipeline_usage/PaddleOCR-VL-HYGON-DCU.html" class="md-nav__link">
+      <a href="../pipeline_usage/PaddleOCR-VL-Hygon-DCU.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL 海光 DCU 环境配置教程
+    PaddleOCR-VL 海光 DCU 使用教程
   
 
     
@@ -1528,7 +1532,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL 沐曦 GPU 环境配置教程
+    PaddleOCR-VL 沐曦 GPU 使用教程
   
 
     
@@ -1556,7 +1560,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL 天数 GPU 环境配置教程
+    PaddleOCR-VL 天数 GPU 使用教程
   
 
     
@@ -1584,7 +1588,7 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL 华为昇腾 NPU 环境配置教程
+    PaddleOCR-VL 华为昇腾 NPU 使用教程
   
 
     
@@ -1612,7 +1616,63 @@ You're not viewing the latest version.
   <span class="md-ellipsis">
     
   
-    PaddleOCR-VL Apple Silicon 环境配置教程
+    PaddleOCR-VL Apple Silicon 使用教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pipeline_usage/PaddleOCR-VL-AMD-GPU.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PaddleOCR-VL AMD GPU 使用教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pipeline_usage/PaddleOCR-VL-Intel-Arc-GPU.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PaddleOCR-VL Intel Arc GPU 使用教程
   
 
     
@@ -4242,7 +4302,7 @@ You're not viewing the latest version.
 
 <!-- Page content -->
 <h1 id="onnx">获取 ONNX 模型<a class="headerlink" href="#onnx" title="Permanent link">&para;</a></h1>
-<p>PaddleOCR 提供了丰富的预训练模型，这些模型均采用飞桨的静态图格式进行存储。若需在部署阶段使用 ONNX 格式的模型，可借助 PaddleX 提供的 Paddle2ONNX 插件进行转换。关于 PaddleX 及其与 PaddleOCR 之间的关系，请参考 <a href="../paddleocr_and_paddlex.html#1-paddleocr-与-paddlex-的区别与联系">PaddleOCR 与 PaddleX 的区别与联系</a>。</p>
+<p>PaddleOCR 提供了丰富的预训练模型，这些模型均采用飞桨的静态图格式进行存储。若需在部署阶段使用 ONNX 格式的模型，可借助 PaddleX 提供的 Paddle2ONNX 插件进行转换。关于 PaddleX 及其与 PaddleOCR 之间的关系，请参考 <a href="../paddleocr_and_paddlex.html#1-paddleocr-paddlex">PaddleOCR 与 PaddleX 的区别与联系</a>。</p>
 <p>首先，执行如下命令，通过 PaddleX CLI 安装 PaddleX 的 Paddle2ONNX 插件：</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Windows 用户需使用以下命令安装 paddlepaddle dev版本</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># python -m pip install --pre paddlepaddle -i https://www.paddlepaddle.org.cn/packages/nightly/cpu/</span>
