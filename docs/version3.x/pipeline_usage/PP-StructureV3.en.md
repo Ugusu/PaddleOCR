@@ -1648,7 +1648,7 @@ The inference result will be printed in the terminal. The default output of the 
        [ 13, ..., 777]], dtype=int16)}}}
 </code></pre></details>
 
-For explanation of the result parameters, refer to [2.2 Python Script Integration](#222-python-script-integration).
+For explanation of the result parameters, refer to [2.2 Python Script Integration](#22-python-script-integration).
 
 <b>Note:</b> Due to the large size of the default model in the pipeline, the inference speed may be slow. You can refer to the model list in Section 1 to replace it with a faster model.
 
@@ -1670,6 +1670,7 @@ for res in output:
     res.print() ## Print the structured prediction output
     res.save_to_json(save_path="output") ## Save the current image's structured result in JSON format
     res.save_to_markdown(save_path="output") ## Save the current image's result in Markdown format
+    res.save_to_word(save_path="output") ## Save the current image's result in Word format
 ```
 
 For PDF files, each page will be processed individually and generate a separate Markdown file. If you want to convert the entire PDF to a single Markdown file, use the following method:
@@ -2731,6 +2732,14 @@ If enabled, the cell detection model will not be used, and only the table struct
 <td>None</td>
 </tr>
 <tr>
+<td><code>save_to_word()</code></td>
+<td>Save the layout parsing results as a Word (.docx) format file</td>
+<td><code>save_path</code></td>
+<td><code>str</code></td>
+<td>Path to save the file, supports directory or file path.</td>
+<td>None</td>
+</tr>
+<tr>
 <td><code>save_to_markdown()</code></td>
 <td>Save each page of an image or PDF file as a markdown file</td>
 <td><code>save_path</code></td>
@@ -2904,7 +2913,7 @@ Additionally, you can access the prediction results and visual images through th
 
 If the pipeline meets your requirements for inference speed and accuracy, you can proceed with development integration or deployment.
 
-If you want to directly use the pipeline in your Python project, refer to the example code in [2.2 Python script mode](#22-python脚本方式集成).
+If you want to directly use the pipeline in your Python project, refer to the example code in [2.2 Python script mode](#22-python-script-integration).
 
 In addition, PaddleOCR provides two other deployment options described in detail below:
 
